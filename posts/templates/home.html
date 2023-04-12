@@ -1,0 +1,46 @@
+<!-- templates/posts/home.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_post' %}" class="btn btn-primary mb-3">Add Post</a>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">register</a> to add posts.</p>
+        {% endif %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    {% if user.is_authenticated %}
+                    <th>Author</th>
+                    {% endif %}
+                    <th>Content</th>
+                    <th>Image</th>
+                    {% if user.is_authenticated %}
+                    <th>Date Published</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{ post.title }}</td>
+                        {% if user.is_authenticated %}
+                        <td>{{ post.author.username }}</td>
+                        {% endif %}
+                        <td>{{ post.content }}</td>
+                        <td>
+                            {% if post.image %}
+                                <img width="80" height="80" src="{{ post.image.url }}" alt="post image">
+                            {% endif %}
+                        </td>
+                        {% if user.is_authenticated %}
+                        <td>{{ post.date_posted }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
